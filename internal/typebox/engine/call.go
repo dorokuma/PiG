@@ -1,9 +1,12 @@
 package engine
 
 import (
+	"encoding/json"
 	"fmt"
 	"runtime"
 	"slices"
+
+	"github.com/MichaelKinsy/PiG/internal/jsparity"
 )
 
 // Call runs the member of TypeBox's `Type` namespace named member on args, as JavaScript would: arguments past the
@@ -197,4 +200,39 @@ var members = map[string]member{
 	"This":  func(e *eng, a []any) any { return tThis(arg(a, 0)) },
 	"Tuple": func(e *eng, a []any) any { return tTuple(arg(a, 0), defaultOptions(arg(a, 1))) },
 	"With":  func(e *eng, a []any) any { return withAction(arg(a, 0), arg(a, 1)) },
+}
+
+// Serve answers one engine request: `{"member": "...", "args": [<wire>, ...]}` with `{"value": <wire>}`, or
+// `{"error": {"name": "...", "message": "..."}}` for what TypeBox throws. A request that is not that is an error too.
+func Serve(request []byte) []byte {
+	var req struct {
+		Member string          `json:"member"`
+		Args   json.RawMessage `json:"args"`
+	}
+	fail := func(name, message string) []byte {
+		var b []byte
+		b = append(b, `{"error":{"name":`...)
+		b = jsparity.AppendString(b, name)
+		b = append(b, `,"message":`...)
+		b = jsparity.AppendString(b, message)
+		return append(b, `}}`...)
+	}
+	if err := json.Unmarshal(request, &req); err != nil {
+		return fail("TypeError", "bad engine request: "+err.Error())
+	}
+	decoded, err := Decode(string(req.Args))
+	if err != nil {
+		e := err.(*Error)
+		return fail(e.Name, e.Message)
+	}
+	args, ok := decoded.([]any)
+	if !ok {
+		return fail("TypeError", "bad engine request: args is not a list")
+	}
+	value, err := Call(req.Member, args)
+	if err != nil {
+		e := err.(*Error)
+		return fail(e.Name, e.Message)
+	}
+	return append(append([]byte(`{"value":`), Encode(value)...), '}')
 }
