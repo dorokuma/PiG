@@ -81,6 +81,9 @@ type HostHelpers struct {
 	// HighlightCode is highlightCode (markdown false) or getMarkdownTheme().highlightCode (markdown true), drawn with the palette of the theme initTheme installed, or with the
 	// host's active theme when palette is empty.
 	HighlightCode func(code, lang string, markdown bool, palette []byte) ([]string, error)
+	// TypeEngine answers one type.engine request, `{"member": ..., "args": [...]}`, with the engine's reply (see type_engine.go); a fused extension runs TypeBox's type engine in the
+	// host's own process.
+	TypeEngine func(request []byte) []byte
 	// LoadTheme is the palette of the theme initTheme(name) installs; a nil name is initTheme(undefined).
 	LoadTheme func(name *string) ([]byte, error)
 	// WithFileMutationQueue runs fn in the host's file mutation queue for the absolute path (the host's WithFileMutationQueue) and returns the resolve error or fn's error.

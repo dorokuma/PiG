@@ -266,10 +266,19 @@ func TestTypeMatchesPi(t *testing.T) {
 	if len(file.Cases) == 0 {
 		t.Fatal("Type.json has no cases")
 	}
+	engineCases := 0
 	for _, c := range file.Cases {
 		node, err := decodeOrdered(c.Args[0])
 		if err != nil {
 			t.Fatalf("%s: %v", c.Name, err)
+		}
+		if top, isNode := node.(*OrderedObject); isNode {
+			if name, _ := top.values["$call"].(string); typeEngineMembers[name] || recordWithEngineKey(top) || c.Name == "conformance engine tool parameters" {
+				// Served by the host's type engine, which this module cannot link: the same cases run through the SDK in the root module (coding/extension/host/fusepack,
+				// TestTypeEngineMembersMatchPi) and through the host socket (TestConformance_TypeEngineMembersAgreeAcrossSDKs).
+				engineCases++
+				continue
+			}
 		}
 		got, err := resolveType(node)
 		if c.Throws != nil {
@@ -316,6 +325,33 @@ func TestTypeMatchesPi(t *testing.T) {
 			t.Errorf("%s: %v, Pi %v", c.Name, got, wantValue)
 		}
 	}
+	t.Logf("%d cases are served by the host's type engine and run elsewhere", engineCases)
+}
+
+// recordWithEngineKey reports a Type.Record whose key is of a kind TypeBox evaluates with its type engine (an enum, an intersection or a template literal).
+func recordWithEngineKey(node *OrderedObject) bool {
+	if name, _ := node.values["$call"].(string); name != "Record" {
+		return false
+	}
+	args, _ := node.values["args"].([]any)
+	if len(args) == 0 {
+		return false
+	}
+	key, _ := args[0].(*OrderedObject)
+	if key == nil {
+		return false
+	}
+	kind, _ := key.values["$call"].(string)
+	return kind == "Enum" || kind == "Intersect" || kind == "TemplateLiteral"
+}
+
+// typeEngineMembers are the members of Type the host's type engine serves (type_engine_members.go): calling one needs a host.
+var typeEngineMembers = map[string]bool{
+	"Call": true, "Capitalize": true, "Conditional": true, "Constructor": true, "ConstructorParameters": true, "Cyclic": true, "Dependent": true, "Evaluate": true, "Exclude": true,
+	"Extends": true, "Extract": true, "Function": true, "Generic": true, "Identifier": true, "Index": true, "Infer": true, "InstanceType": true, "Instantiate": true, "Interface": true,
+	"KeyOf": true, "Lowercase": true, "Mapped": true, "Module": true, "NonNullable": true, "Omit": true, "Parameter": true, "Parameters": true, "Partial": true, "Pick": true,
+	"ReadonlyObject": true, "ReadonlyType": true, "RecordKey": true, "RecordPattern": true, "RecordValue": true, "Required": true, "Rest": true, "ReturnType": true, "Script": true,
+	"TemplateLiteral": true, "This": true, "Tuple": true, "Uncapitalize": true, "Uppercase": true,
 }
 
 // TestTypeOmitsTheCodecFamily is the evidence of divergence D198: the Codec family of Pi's Type is not served, so none of its members exists.

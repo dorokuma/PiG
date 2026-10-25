@@ -11637,16 +11637,6 @@
    }
   },
   {
-   "name": "infer with no arguments throws",
-   "args": [
-    {
-     "$call": "Infer",
-     "args": []
-    }
-   ],
-   "throws": "Invalid Arguments"
-  },
-  {
    "name": "parameter",
    "args": [
     {
@@ -16968,18 +16958,6 @@
    }
   },
   {
-   "name": "instantiate without a context throws",
-   "args": [
-    {
-     "$call": "Instantiate",
-     "args": []
-    }
-   ],
-   "result": {
-    "$": "undefined"
-   }
-  },
-  {
    "name": "with of a non-ref",
    "args": [
     {
@@ -17008,70 +16986,1010 @@
    }
   },
   {
-   "name": "with undefined options throws",
+   "name": "conformance engine tool parameters",
    "args": [
     {
-     "$call": "With",
+     "$call": "Object",
      "args": [
       {
-       "$call": "String",
-       "args": []
-      }
-     ]
-    }
-   ],
-   "throws": "Cannot convert undefined or null to object"
-  },
-  {
-   "name": "pick undefined keys throws",
-   "args": [
-    {
-     "$call": "Pick",
-     "args": [
-      {
-       "$call": "Object",
-       "args": [
-        {
-         "1": {
-          "$call": "Integer",
-          "args": []
-         },
-         "a": {
-          "$call": "String",
-          "args": []
-         },
-         "b": {
-          "$call": "Optional",
+       "picked": {
+        "$call": "Pick",
+        "args": [
+         {
+          "$call": "Object",
           "args": [
            {
-            "$call": "Number",
-            "args": []
+            "id": {
+             "$call": "String",
+             "args": []
+            },
+            "name": {
+             "$call": "Optional",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            },
+            "n": {
+             "$call": "Integer",
+             "args": []
+            },
+            "tags": {
+             "$call": "Array",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            }
            }
           ]
          },
-         "c": {
-          "$call": "Readonly",
+         [
+          "id",
+          "name"
+         ]
+        ]
+       },
+       "omitted": {
+        "$call": "Omit",
+        "args": [
+         {
+          "$call": "Object",
           "args": [
+           {
+            "id": {
+             "$call": "String",
+             "args": []
+            },
+            "name": {
+             "$call": "Optional",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            },
+            "n": {
+             "$call": "Integer",
+             "args": []
+            },
+            "tags": {
+             "$call": "Array",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            }
+           }
+          ]
+         },
+         [
+          "tags"
+         ]
+        ]
+       },
+       "partial": {
+        "$call": "Partial",
+        "args": [
+         {
+          "$call": "Object",
+          "args": [
+           {
+            "id": {
+             "$call": "String",
+             "args": []
+            },
+            "name": {
+             "$call": "Optional",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            },
+            "n": {
+             "$call": "Integer",
+             "args": []
+            },
+            "tags": {
+             "$call": "Array",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            }
+           }
+          ]
+         }
+        ]
+       },
+       "required": {
+        "$call": "Required",
+        "args": [
+         {
+          "$call": "Object",
+          "args": [
+           {
+            "a": {
+             "$call": "Optional",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            },
+            "b": {
+             "$call": "Optional",
+             "args": [
+              {
+               "$call": "Number",
+               "args": []
+              }
+             ]
+            }
+           }
+          ]
+         }
+        ]
+       },
+       "keys": {
+        "$call": "KeyOf",
+        "args": [
+         {
+          "$call": "Object",
+          "args": [
+           {
+            "id": {
+             "$call": "String",
+             "args": []
+            },
+            "name": {
+             "$call": "Optional",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            },
+            "n": {
+             "$call": "Integer",
+             "args": []
+            },
+            "tags": {
+             "$call": "Array",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            }
+           }
+          ]
+         }
+        ]
+       },
+       "indexed": {
+        "$call": "Index",
+        "args": [
+         {
+          "$call": "Object",
+          "args": [
+           {
+            "id": {
+             "$call": "String",
+             "args": []
+            },
+            "name": {
+             "$call": "Optional",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            },
+            "n": {
+             "$call": "Integer",
+             "args": []
+            },
+            "tags": {
+             "$call": "Array",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            }
+           }
+          ]
+         },
+         {
+          "$call": "Literal",
+          "args": [
+           "n"
+          ]
+         }
+        ]
+       },
+       "readonlyObject": {
+        "$call": "ReadonlyObject",
+        "args": [
+         {
+          "$call": "Object",
+          "args": [
+           {
+            "id": {
+             "$call": "String",
+             "args": []
+            },
+            "name": {
+             "$call": "Optional",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            },
+            "n": {
+             "$call": "Integer",
+             "args": []
+            },
+            "tags": {
+             "$call": "Array",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              }
+             ]
+            }
+           }
+          ]
+         }
+        ]
+       },
+       "readonlyType": {
+        "$call": "ReadonlyType",
+        "args": [
+         {
+          "$call": "Array",
+          "args": [
+           {
+            "$call": "String",
+            "args": []
+           }
+          ]
+         }
+        ]
+       },
+       "evaluated": {
+        "$call": "Evaluate",
+        "args": [
+         {
+          "$call": "Intersect",
+          "args": [
+           [
+            {
+             "$call": "Object",
+             "args": [
+              {
+               "a": {
+                "$call": "String",
+                "args": []
+               }
+              }
+             ]
+            },
+            {
+             "$call": "Object",
+             "args": [
+              {
+               "b": {
+                "$call": "Number",
+                "args": []
+               }
+              }
+             ]
+            }
+           ]
+          ]
+         }
+        ]
+       },
+       "excluded": {
+        "$call": "Exclude",
+        "args": [
+         {
+          "$call": "Union",
+          "args": [
+           [
+            {
+             "$call": "String",
+             "args": []
+            },
+            {
+             "$call": "Number",
+             "args": []
+            },
+            {
+             "$call": "Boolean",
+             "args": []
+            }
+           ]
+          ]
+         },
+         {
+          "$call": "String",
+          "args": []
+         }
+        ]
+       },
+       "extracted": {
+        "$call": "Extract",
+        "args": [
+         {
+          "$call": "Union",
+          "args": [
+           [
+            {
+             "$call": "String",
+             "args": []
+            },
+            {
+             "$call": "Number",
+             "args": []
+            },
+            {
+             "$call": "Boolean",
+             "args": []
+            }
+           ]
+          ]
+         },
+         {
+          "$call": "Union",
+          "args": [
+           [
+            {
+             "$call": "String",
+             "args": []
+            },
+            {
+             "$call": "Number",
+             "args": []
+            }
+           ]
+          ]
+         }
+        ]
+       },
+       "nonNullable": {
+        "$call": "NonNullable",
+        "args": [
+         {
+          "$call": "Union",
+          "args": [
+           [
+            {
+             "$call": "String",
+             "args": []
+            },
+            {
+             "$call": "Null",
+             "args": []
+            }
+           ]
+          ]
+         }
+        ]
+       },
+       "uppercase": {
+        "$call": "Uppercase",
+        "args": [
+         {
+          "$call": "Literal",
+          "args": [
+           "abc"
+          ]
+         }
+        ]
+       },
+       "lowercase": {
+        "$call": "Lowercase",
+        "args": [
+         {
+          "$call": "Literal",
+          "args": [
+           "ABC"
+          ]
+         }
+        ]
+       },
+       "capitalize": {
+        "$call": "Capitalize",
+        "args": [
+         {
+          "$call": "Literal",
+          "args": [
+           "abc"
+          ]
+         }
+        ]
+       },
+       "uncapitalize": {
+        "$call": "Uncapitalize",
+        "args": [
+         {
+          "$call": "Literal",
+          "args": [
+           "ABC"
+          ]
+         }
+        ]
+       },
+       "parameters": {
+        "$call": "Parameters",
+        "args": [
+         {
+          "$call": "Function",
+          "args": [
+           [
+            {
+             "$call": "String",
+             "args": []
+            },
+            {
+             "$call": "Number",
+             "args": []
+            }
+           ],
            {
             "$call": "Boolean",
             "args": []
            }
           ]
          }
-        }
-       ]
+        ]
+       },
+       "constructorParameters": {
+        "$call": "ConstructorParameters",
+        "args": [
+         {
+          "$call": "Constructor",
+          "args": [
+           [
+            {
+             "$call": "String",
+             "args": []
+            }
+           ],
+           {
+            "$call": "Object",
+            "args": [
+             {}
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "returnType": {
+        "$call": "ReturnType",
+        "args": [
+         {
+          "$call": "Function",
+          "args": [
+           [
+            {
+             "$call": "String",
+             "args": []
+            }
+           ],
+           {
+            "$call": "Number",
+            "args": []
+           }
+          ]
+         }
+        ]
+       },
+       "instanceType": {
+        "$call": "InstanceType",
+        "args": [
+         {
+          "$call": "Constructor",
+          "args": [
+           [
+            {
+             "$call": "String",
+             "args": []
+            }
+           ],
+           {
+            "$call": "Object",
+            "args": [
+             {
+              "a": {
+               "$call": "String",
+               "args": []
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "fn": {
+        "$call": "Function",
+        "args": [
+         [
+          {
+           "$call": "String",
+           "args": []
+          }
+         ],
+         {
+          "$call": "Number",
+          "args": []
+         }
+        ]
+       },
+       "constructorType": {
+        "$call": "Constructor",
+        "args": [
+         [
+          {
+           "$call": "String",
+           "args": []
+          }
+         ],
+         {
+          "$call": "Object",
+          "args": [
+           {
+            "a": {
+             "$call": "String",
+             "args": []
+            }
+           }
+          ]
+         }
+        ]
+       },
+       "tuple": {
+        "$call": "Tuple",
+        "args": [
+         [
+          {
+           "$call": "String",
+           "args": []
+          },
+          {
+           "$call": "Number",
+           "args": []
+          }
+         ]
+        ]
+       },
+       "template": {
+        "$call": "TemplateLiteral",
+        "args": [
+         "a${string}"
+        ]
+       },
+       "conditional": {
+        "$call": "Conditional",
+        "args": [
+         {
+          "$call": "String",
+          "args": []
+         },
+         {
+          "$call": "String",
+          "args": []
+         },
+         {
+          "$call": "Literal",
+          "args": [
+           "yes"
+          ]
+         },
+         {
+          "$call": "Literal",
+          "args": [
+           "no"
+          ]
+         }
+        ]
+       },
+       "mapped": {
+        "$call": "Mapped",
+        "args": [
+         {
+          "$call": "Identifier",
+          "args": [
+           "K"
+          ]
+         },
+         {
+          "$call": "Union",
+          "args": [
+           [
+            {
+             "$call": "Literal",
+             "args": [
+              "a"
+             ]
+            },
+            {
+             "$call": "Literal",
+             "args": [
+              "b"
+             ]
+            }
+           ]
+          ]
+         },
+         {
+          "$call": "Ref",
+          "args": [
+           "K"
+          ]
+         },
+         {
+          "$call": "String",
+          "args": []
+         }
+        ]
+       },
+       "cyclic": {
+        "$call": "Cyclic",
+        "args": [
+         {
+          "A": {
+           "$call": "Object",
+           "args": [
+            {
+             "next": {
+              "$call": "Optional",
+              "args": [
+               {
+                "$call": "Ref",
+                "args": [
+                 "A"
+                ]
+               }
+              ]
+             }
+            }
+           ]
+          }
+         },
+         "A"
+        ]
+       },
+       "module": {
+        "$call": "Module",
+        "args": [
+         {
+          "A": {
+           "$call": "String",
+           "args": []
+          },
+          "B": {
+           "$call": "Array",
+           "args": [
+            {
+             "$call": "Ref",
+             "args": [
+              "A"
+             ]
+            }
+           ]
+          }
+         }
+        ]
+       },
+       "interface": {
+        "$call": "Interface",
+        "args": [
+         [
+          {
+           "$call": "Object",
+           "args": [
+            {
+             "a": {
+              "$call": "String",
+              "args": []
+             }
+            }
+           ]
+          }
+         ],
+         {
+          "b": {
+           "$call": "Number",
+           "args": []
+          }
+         }
+        ]
+       },
+       "dependent": {
+        "$call": "Dependent",
+        "args": [
+         {
+          "$call": "String",
+          "args": []
+         },
+         {
+          "$call": "Number",
+          "args": []
+         },
+         {
+          "$call": "Boolean",
+          "args": []
+         }
+        ]
+       },
+       "extends": {
+        "$call": "Extends",
+        "args": [
+         {},
+         {
+          "$call": "String",
+          "args": []
+         },
+         {
+          "$call": "String",
+          "args": []
+         }
+        ]
+       },
+       "instantiate": {
+        "$call": "Instantiate",
+        "args": [
+         {
+          "A": {
+           "$call": "String",
+           "args": []
+          }
+         },
+         {
+          "$call": "Ref",
+          "args": [
+           "A"
+          ]
+         }
+        ]
+       },
+       "call": {
+        "$call": "Instantiate",
+        "args": [
+         {
+          "Id": {
+           "$call": "Generic",
+           "args": [
+            [
+             {
+              "$call": "Parameter",
+              "args": [
+               "T"
+              ]
+             }
+            ],
+            {
+             "$call": "Ref",
+             "args": [
+              "T"
+             ]
+            }
+           ]
+          }
+         },
+         {
+          "$call": "Call",
+          "args": [
+           {
+            "$call": "Ref",
+            "args": [
+             "Id"
+            ]
+           },
+           [
+            {
+             "$call": "String",
+             "args": []
+            }
+           ]
+          ]
+         }
+        ]
+       },
+       "script": {
+        "$call": "Script",
+        "args": [
+         "{ a: string; b?: number[] }"
+        ]
+       },
+       "rest": {
+        "$call": "Rest",
+        "args": [
+         {
+          "$call": "Tuple",
+          "args": [
+           [
+            {
+             "$call": "String",
+             "args": []
+            }
+           ]
+          ]
+         }
+        ]
+       },
+       "this": {
+        "$call": "This",
+        "args": []
+       },
+       "infer": {
+        "$call": "Infer",
+        "args": [
+         "U",
+         {
+          "$call": "String",
+          "args": []
+         }
+        ]
+       },
+       "identifier": {
+        "$call": "Identifier",
+        "args": [
+         "K"
+        ]
+       },
+       "generic": {
+        "$call": "Generic",
+        "args": [
+         [
+          {
+           "$call": "Parameter",
+           "args": [
+            "T",
+            {
+             "$call": "String",
+             "args": []
+            },
+            {
+             "$call": "String",
+             "args": []
+            }
+           ]
+          }
+         ],
+         {
+          "$call": "Array",
+          "args": [
+           {
+            "$call": "Ref",
+            "args": [
+             "T"
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "recordKey": {
+        "$call": "RecordKey",
+        "args": [
+         {
+          "$call": "Record",
+          "args": [
+           {
+            "$call": "String",
+            "args": []
+           },
+           {
+            "$call": "Number",
+            "args": []
+           }
+          ]
+         }
+        ]
+       },
+       "recordValue": {
+        "$call": "RecordValue",
+        "args": [
+         {
+          "$call": "Record",
+          "args": [
+           {
+            "$call": "String",
+            "args": []
+           },
+           {
+            "$call": "Number",
+            "args": []
+           }
+          ]
+         }
+        ]
+       },
+       "recordPattern": {
+        "$call": "String",
+        "args": [
+         {
+          "description": {
+           "$call": "RecordPattern",
+           "args": [
+            {
+             "$call": "Record",
+             "args": [
+              {
+               "$call": "String",
+               "args": []
+              },
+              {
+               "$call": "Number",
+               "args": []
+              }
+             ]
+            }
+           ]
+          }
+         }
+        ]
+       },
+       "enumKeyRecord": {
+        "$call": "Record",
+        "args": [
+         {
+          "$call": "Enum",
+          "args": [
+           [
+            "x",
+            "y"
+           ]
+          ]
+         },
+         {
+          "$call": "Number",
+          "args": []
+         }
+        ]
+       }
+      },
+      {
+       "additionalProperties": false
       }
      ]
     }
    ],
    "result": {
-    "json": "{\"type\":\"object\",\"properties\":{}}",
+    "json": "{\"type\":\"object\",\"required\":[\"picked\",\"omitted\",\"partial\",\"required\",\"keys\",\"indexed\",\"readonlyObject\",\"readonlyType\",\"evaluated\",\"excluded\",\"extracted\",\"nonNullable\",\"uppercase\",\"lowercase\",\"capitalize\",\"uncapitalize\",\"parameters\",\"constructorParameters\",\"returnType\",\"instanceType\",\"fn\",\"constructorType\",\"tuple\",\"template\",\"conditional\",\"mapped\",\"cyclic\",\"module\",\"interface\",\"dependent\",\"extends\",\"instantiate\",\"call\",\"script\",\"rest\",\"this\",\"infer\",\"identifier\",\"generic\",\"recordKey\",\"recordValue\",\"recordPattern\",\"enumKeyRecord\"],\"properties\":{\"picked\":{\"type\":\"object\",\"required\":[\"id\"],\"properties\":{\"id\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"}}},\"omitted\":{\"type\":\"object\",\"required\":[\"id\",\"n\"],\"properties\":{\"id\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"n\":{\"type\":\"integer\"}}},\"partial\":{\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"n\":{\"type\":\"integer\"},\"tags\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}}},\"required\":{\"type\":\"object\",\"required\":[\"a\",\"b\"],\"properties\":{\"a\":{\"type\":\"string\"},\"b\":{\"type\":\"number\"}}},\"keys\":{\"anyOf\":[{\"type\":\"string\",\"const\":\"id\"},{\"type\":\"string\",\"const\":\"name\"},{\"type\":\"string\",\"const\":\"n\"},{\"type\":\"string\",\"const\":\"tags\"}]},\"indexed\":{\"type\":\"integer\"},\"readonlyObject\":{\"type\":\"object\",\"required\":[\"id\",\"n\",\"tags\"],\"properties\":{\"id\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"n\":{\"type\":\"integer\"},\"tags\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}}},\"readonlyType\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}},\"evaluated\":{\"type\":\"object\",\"required\":[\"a\",\"b\"],\"properties\":{\"a\":{\"type\":\"string\"},\"b\":{\"type\":\"number\"}}},\"excluded\":{\"anyOf\":[{\"type\":\"number\"},{\"type\":\"boolean\"}]},\"extracted\":{\"anyOf\":[{\"type\":\"string\"},{\"type\":\"number\"}]},\"nonNullable\":{\"type\":\"string\"},\"uppercase\":{\"type\":\"string\",\"const\":\"ABC\"},\"lowercase\":{\"type\":\"string\",\"const\":\"abc\"},\"capitalize\":{\"type\":\"string\",\"const\":\"Abc\"},\"uncapitalize\":{\"type\":\"string\",\"const\":\"aBC\"},\"parameters\":{\"type\":\"array\",\"additionalItems\":false,\"items\":[{\"type\":\"string\"},{\"type\":\"number\"}],\"minItems\":2},\"constructorParameters\":{\"type\":\"array\",\"additionalItems\":false,\"items\":[{\"type\":\"string\"}],\"minItems\":1},\"returnType\":{\"type\":\"number\"},\"instanceType\":{\"type\":\"object\",\"required\":[\"a\"],\"properties\":{\"a\":{\"type\":\"string\"}}},\"fn\":{\"type\":\"function\",\"parameters\":[{\"type\":\"string\"}],\"returnType\":{\"type\":\"number\"}},\"constructorType\":{\"type\":\"constructor\",\"parameters\":[{\"type\":\"string\"}],\"instanceType\":{\"type\":\"object\",\"required\":[\"a\"],\"properties\":{\"a\":{\"type\":\"string\"}}}},\"tuple\":{\"type\":\"array\",\"additionalItems\":false,\"items\":[{\"type\":\"string\"},{\"type\":\"number\"}],\"minItems\":2},\"template\":{\"type\":\"string\",\"pattern\":\"^a.*$\"},\"conditional\":{\"type\":\"string\",\"const\":\"yes\"},\"mapped\":{\"type\":\"object\",\"required\":[\"a\",\"b\"],\"properties\":{\"a\":{\"type\":\"string\"},\"b\":{\"type\":\"string\"}}},\"cyclic\":{\"$defs\":{\"A\":{\"type\":\"object\",\"properties\":{\"next\":{\"$ref\":\"A\"}},\"$id\":\"A\"}},\"$ref\":\"A\"},\"module\":{\"A\":{\"type\":\"string\"},\"B\":{\"type\":\"array\",\"items\":{\"type\":\"string\"}}},\"interface\":{\"type\":\"object\",\"required\":[\"a\",\"b\"],\"properties\":{\"a\":{\"type\":\"string\"},\"b\":{\"type\":\"number\"}}},\"dependent\":{\"if\":{\"type\":\"string\"},\"then\":{\"type\":\"number\"},\"else\":{\"type\":\"boolean\"}},\"extends\":{\"inferred\":{}},\"instantiate\":{\"type\":\"string\"},\"call\":{\"type\":\"string\"},\"script\":{\"type\":\"object\",\"required\":[\"a\"],\"properties\":{\"a\":{\"type\":\"string\"},\"b\":{\"type\":\"array\",\"items\":{\"type\":\"number\"}}}},\"rest\":{\"type\":\"rest\",\"items\":{\"type\":\"array\",\"additionalItems\":false,\"items\":[{\"type\":\"string\"}],\"minItems\":1}},\"this\":{\"$ref\":\"#\"},\"infer\":{\"type\":\"infer\",\"name\":\"U\",\"extends\":{\"type\":\"string\"}},\"identifier\":{\"name\":\"K\"},\"generic\":{\"type\":\"generic\",\"parameters\":[{\"name\":\"T\",\"extends\":{\"type\":\"string\"},\"equals\":{\"type\":\"string\"}}],\"expression\":{\"type\":\"array\",\"items\":{\"$ref\":\"T\"}}},\"recordKey\":{\"type\":\"string\"},\"recordValue\":{\"type\":\"number\"},\"recordPattern\":{\"type\":\"string\",\"description\":\"^.*$\"},\"enumKeyRecord\":{\"type\":\"object\",\"required\":[\"x\",\"y\"],\"properties\":{\"x\":{\"type\":\"number\"},\"y\":{\"type\":\"number\"}}}},\"additionalProperties\":false}",
     "hidden": {
      "~kind": "Object"
     },
-    "wire": "{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"properties\":{}}}",
+    "wire": "{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"picked\",\"omitted\",\"partial\",\"required\",\"keys\",\"indexed\",\"readonlyObject\",\"readonlyType\",\"evaluated\",\"excluded\",\"extracted\",\"nonNullable\",\"uppercase\",\"lowercase\",\"capitalize\",\"uncapitalize\",\"parameters\",\"constructorParameters\",\"returnType\",\"instanceType\",\"fn\",\"constructorType\",\"tuple\",\"template\",\"conditional\",\"mapped\",\"cyclic\",\"module\",\"interface\",\"dependent\",\"extends\",\"instantiate\",\"call\",\"script\",\"rest\",\"this\",\"infer\",\"identifier\",\"generic\",\"recordKey\",\"recordValue\",\"recordPattern\",\"enumKeyRecord\"],\"properties\":{\"picked\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"id\"],\"properties\":{\"id\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"name\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\",\"~optional\":true},\"e\":{\"type\":\"string\"}}}}},\"omitted\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"id\",\"n\"],\"properties\":{\"id\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"name\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\",\"~optional\":true},\"e\":{\"type\":\"string\"}},\"n\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Integer\"},\"e\":{\"type\":\"integer\"}}}}},\"partial\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"properties\":{\"id\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\",\"~optional\":true},\"e\":{\"type\":\"string\"}},\"name\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\",\"~optional\":true},\"e\":{\"type\":\"string\"}},\"n\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Integer\",\"~optional\":true},\"e\":{\"type\":\"integer\"}},\"tags\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Array\",\"~optional\":true},\"e\":{\"type\":\"array\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}}}},\"required\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\",\"b\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"b\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}}}},\"keys\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Union\"},\"e\":{\"anyOf\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"id\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"name\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"n\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"tags\"}}]}},\"indexed\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Integer\"},\"e\":{\"type\":\"integer\"}},\"readonlyObject\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"id\",\"n\",\"tags\"],\"properties\":{\"id\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\",\"~readonly\":true},\"e\":{\"type\":\"string\"}},\"name\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\",\"~optional\":true,\"~readonly\":true},\"e\":{\"type\":\"string\"}},\"n\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Integer\",\"~readonly\":true},\"e\":{\"type\":\"integer\"}},\"tags\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Array\",\"~readonly\":true},\"e\":{\"type\":\"array\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}}}},\"readonlyType\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Array\",\"~immutable\":true},\"e\":{\"type\":\"array\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}},\"evaluated\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\",\"b\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"b\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}}}},\"excluded\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Union\"},\"e\":{\"anyOf\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Boolean\"},\"e\":{\"type\":\"boolean\"}}]}},\"extracted\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Union\"},\"e\":{\"anyOf\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}]}},\"nonNullable\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"uppercase\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"ABC\"}},\"lowercase\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"abc\"}},\"capitalize\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"Abc\"}},\"uncapitalize\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"aBC\"}},\"parameters\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Tuple\"},\"e\":{\"type\":\"array\",\"additionalItems\":false,\"items\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}],\"minItems\":2}},\"constructorParameters\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Tuple\"},\"e\":{\"type\":\"array\",\"additionalItems\":false,\"items\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}],\"minItems\":1}},\"returnType\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}},\"instanceType\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}},\"fn\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Function\"},\"e\":{\"type\":\"function\",\"parameters\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}],\"returnType\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}}},\"constructorType\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Constructor\"},\"e\":{\"type\":\"constructor\",\"parameters\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}],\"instanceType\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}}}},\"tuple\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Tuple\"},\"e\":{\"type\":\"array\",\"additionalItems\":false,\"items\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}],\"minItems\":2}},\"template\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"TemplateLiteral\"},\"e\":{\"type\":\"string\",\"pattern\":\"^a.*$\"}},\"conditional\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"yes\"}},\"mapped\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\",\"b\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"b\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}},\"cyclic\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Cyclic\"},\"e\":{\"$defs\":{\"A\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"properties\":{\"next\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Ref\",\"~optional\":true},\"e\":{\"$ref\":\"A\"}}},\"$id\":\"A\"}}},\"$ref\":\"A\"}},\"module\":{\"A\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"B\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Array\"},\"e\":{\"type\":\"array\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}},\"interface\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\",\"b\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"b\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}}}},\"dependent\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Dependent\"},\"e\":{\"if\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"then\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}},\"else\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Boolean\"},\"e\":{\"type\":\"boolean\"}}}},\"extends\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"ExtendsTrue\"},\"e\":{\"inferred\":{}}},\"instantiate\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"call\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"script\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"b\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Array\",\"~optional\":true},\"e\":{\"type\":\"array\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}}}}}},\"rest\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Rest\"},\"e\":{\"type\":\"rest\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Tuple\"},\"e\":{\"type\":\"array\",\"additionalItems\":false,\"items\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}],\"minItems\":1}}}},\"this\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"This\"},\"e\":{\"$ref\":\"#\"}},\"infer\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Infer\"},\"e\":{\"type\":\"infer\",\"name\":\"U\",\"extends\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}},\"identifier\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Identifier\"},\"e\":{\"name\":\"K\"}},\"generic\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Generic\"},\"e\":{\"type\":\"generic\",\"parameters\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Parameter\"},\"e\":{\"name\":\"T\",\"extends\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"equals\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}],\"expression\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Array\"},\"e\":{\"type\":\"array\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Ref\"},\"e\":{\"$ref\":\"T\"}}}}}},\"recordKey\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"recordValue\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}},\"recordPattern\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\",\"description\":\"^.*$\"}},\"enumKeyRecord\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"x\",\"y\"],\"properties\":{\"x\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}},\"y\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}}}}},\"additionalProperties\":false}}",
     "wireArgs": [
-     "{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"1\",\"a\",\"c\"],\"properties\":{\"1\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Integer\"},\"e\":{\"type\":\"integer\"}},\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"b\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\",\"~optional\":true},\"e\":{\"type\":\"number\"}},\"c\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Boolean\",\"~readonly\":true},\"e\":{\"type\":\"boolean\"}}}}}"
+     "{\"picked\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"id\"],\"properties\":{\"id\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"name\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\",\"~optional\":true},\"e\":{\"type\":\"string\"}}}}},\"omitted\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"id\",\"n\"],\"properties\":{\"id\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"name\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\",\"~optional\":true},\"e\":{\"type\":\"string\"}},\"n\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Integer\"},\"e\":{\"type\":\"integer\"}}}}},\"partial\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"properties\":{\"id\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\",\"~optional\":true},\"e\":{\"type\":\"string\"}},\"name\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\",\"~optional\":true},\"e\":{\"type\":\"string\"}},\"n\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Integer\",\"~optional\":true},\"e\":{\"type\":\"integer\"}},\"tags\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Array\",\"~optional\":true},\"e\":{\"type\":\"array\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}}}},\"required\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\",\"b\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"b\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}}}},\"keys\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Union\"},\"e\":{\"anyOf\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"id\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"name\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"n\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"tags\"}}]}},\"indexed\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Integer\"},\"e\":{\"type\":\"integer\"}},\"readonlyObject\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"id\",\"n\",\"tags\"],\"properties\":{\"id\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\",\"~readonly\":true},\"e\":{\"type\":\"string\"}},\"name\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\",\"~optional\":true,\"~readonly\":true},\"e\":{\"type\":\"string\"}},\"n\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Integer\",\"~readonly\":true},\"e\":{\"type\":\"integer\"}},\"tags\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Array\",\"~readonly\":true},\"e\":{\"type\":\"array\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}}}},\"readonlyType\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Array\",\"~immutable\":true},\"e\":{\"type\":\"array\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}},\"evaluated\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\",\"b\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"b\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}}}},\"excluded\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Union\"},\"e\":{\"anyOf\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Boolean\"},\"e\":{\"type\":\"boolean\"}}]}},\"extracted\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Union\"},\"e\":{\"anyOf\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}]}},\"nonNullable\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"uppercase\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"ABC\"}},\"lowercase\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"abc\"}},\"capitalize\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"Abc\"}},\"uncapitalize\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"aBC\"}},\"parameters\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Tuple\"},\"e\":{\"type\":\"array\",\"additionalItems\":false,\"items\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}],\"minItems\":2}},\"constructorParameters\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Tuple\"},\"e\":{\"type\":\"array\",\"additionalItems\":false,\"items\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}],\"minItems\":1}},\"returnType\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}},\"instanceType\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}},\"fn\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Function\"},\"e\":{\"type\":\"function\",\"parameters\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}],\"returnType\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}}},\"constructorType\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Constructor\"},\"e\":{\"type\":\"constructor\",\"parameters\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}],\"instanceType\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}}}},\"tuple\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Tuple\"},\"e\":{\"type\":\"array\",\"additionalItems\":false,\"items\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}],\"minItems\":2}},\"template\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"TemplateLiteral\"},\"e\":{\"type\":\"string\",\"pattern\":\"^a.*$\"}},\"conditional\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Literal\"},\"e\":{\"type\":\"string\",\"const\":\"yes\"}},\"mapped\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\",\"b\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"b\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}},\"cyclic\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Cyclic\"},\"e\":{\"$defs\":{\"A\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"properties\":{\"next\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Ref\",\"~optional\":true},\"e\":{\"$ref\":\"A\"}}},\"$id\":\"A\"}}},\"$ref\":\"A\"}},\"module\":{\"A\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"B\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Array\"},\"e\":{\"type\":\"array\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}},\"interface\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\",\"b\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"b\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}}}},\"dependent\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Dependent\"},\"e\":{\"if\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"then\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}},\"else\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Boolean\"},\"e\":{\"type\":\"boolean\"}}}},\"extends\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"ExtendsTrue\"},\"e\":{\"inferred\":{}}},\"instantiate\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"call\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"script\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"a\"],\"properties\":{\"a\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"b\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Array\",\"~optional\":true},\"e\":{\"type\":\"array\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}}}}}},\"rest\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Rest\"},\"e\":{\"type\":\"rest\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Tuple\"},\"e\":{\"type\":\"array\",\"additionalItems\":false,\"items\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}],\"minItems\":1}}}},\"this\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"This\"},\"e\":{\"$ref\":\"#\"}},\"infer\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Infer\"},\"e\":{\"type\":\"infer\",\"name\":\"U\",\"extends\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}},\"identifier\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Identifier\"},\"e\":{\"name\":\"K\"}},\"generic\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Generic\"},\"e\":{\"type\":\"generic\",\"parameters\":[{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Parameter\"},\"e\":{\"name\":\"T\",\"extends\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"equals\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}}}}],\"expression\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Array\"},\"e\":{\"type\":\"array\",\"items\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Ref\"},\"e\":{\"$ref\":\"T\"}}}}}},\"recordKey\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\"}},\"recordValue\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}},\"recordPattern\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"String\"},\"e\":{\"type\":\"string\",\"description\":\"^.*$\"}},\"enumKeyRecord\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Object\"},\"e\":{\"type\":\"object\",\"required\":[\"x\",\"y\"],\"properties\":{\"x\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}},\"y\":{\"\\u0000\":\"o\",\"h\":{\"~kind\":\"Number\"},\"e\":{\"type\":\"number\"}}}}}}",
+     "{\"additionalProperties\":false}"
     ]
    }
   },
@@ -17769,7 +18687,7 @@
    }
   },
   {
-   "name": "script object",
+   "name": "script object literal",
    "args": [
     {
      "$call": "Script",

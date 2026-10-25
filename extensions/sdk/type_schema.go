@@ -111,7 +111,10 @@ func (r schemaRoot) MarshalJSON() ([]byte, error) {
 type TypeOptions = *OrderedObject
 
 // typeNamespace is pi-ai's `Type`. Every member is a method: Type.Object, Type.String, Type.Optional, ...
-type typeNamespace struct{}
+type typeNamespace struct {
+	// ExtendsResult is Type.ExtendsResult.
+	ExtendsResult extendsResult
+}
 
 // Type is pi-ai's `Type` (TypeBox's builder namespace). The JSON Schema it returns is byte for byte what Pi's `Type` returns, member order included, which the Pi vectors in
 // test/parity/sdk-vectors/pi-ai/Type.json check. Members that a later release has not ported are absent; the Codec family (Codec, Decode, Encode, DecodeBuilder, EncodeBuilder,
@@ -594,7 +597,7 @@ const (
 
 // Record is `Type.Record(key, value, options)`: for a string, number or integer key, `{"type":"object","patternProperties":{<pattern>: value}}`; for a literal, boolean or
 // union-of-literals key, the object with those properties. A key Pi evaluates through a part of TypeBox this SDK has not ported (an enum, an intersection or a template
-// literal) panics until it is.
+// literal) is evaluated by the host's type engine.
 func (t typeNamespace) Record(key, value any, options ...TypeOptions) *TSchema {
 	if t.IsRef(key) {
 		return deferred("Record", []any{key, value}, firstOptions(options))
@@ -613,7 +616,8 @@ func (t typeNamespace) recordFromKey(key, value any) *TSchema {
 	case t.IsBoolean(key):
 		return t.Object(NewOrderedObject("true", value, "false", value))
 	case t.IsEnum(key), t.IsIntersect(key), t.IsKind(key, "TemplateLiteral"):
-		panic("Type.Record: a key of this kind is evaluated by a part of TypeBox this SDK has not ported yet")
+		// The key kinds TypeBox evaluates with its type engine, which the host runs.
+		return engineSchema(typeEngineCall("Record", key, value))
 	case t.IsInteger(key):
 		return createRecord(integerKeyPattern, value)
 	case t.IsLiteral(key):

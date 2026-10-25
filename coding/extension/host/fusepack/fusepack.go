@@ -19,6 +19,7 @@ import (
 	"github.com/MichaelKinsy/PiG/extensions/sdk/json"
 	"github.com/MichaelKinsy/PiG/internal/codingagent"
 	"github.com/MichaelKinsy/PiG/internal/codingagent/tools"
+	"github.com/MichaelKinsy/PiG/internal/typebox/engine"
 )
 
 // fusedServes maps an extension name to its in-process serve func. Populated by
@@ -123,6 +124,7 @@ func HostHelpers() *sdk.HostHelpers {
 			return subprocess.BuiltinToolExecute(ctx, args, managedToolsDir(), subprocess.BuiltinToolPeer{Callback: peer.Callback, Update: peer.Update, Exec: peer.Exec})
 		},
 		HighlightCode: subprocess.HighlightCodeLines,
+		TypeEngine:    engine.Serve,
 		LoadTheme:     subprocess.LoadThemeJSON,
 		WithFileMutationQueue: func(filePath string, fn func() error) error {
 			_, err := tools.WithFileMutationQueue(filePath, func() (struct{}, error) { return struct{}{}, fn() })

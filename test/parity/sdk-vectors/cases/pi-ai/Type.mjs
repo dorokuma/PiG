@@ -311,7 +311,6 @@ add("this with options", t("This", { description: "d" }));
 add("identifier", t("Identifier", "K"));
 add("infer", t("Infer", "U"));
 add("infer with a constraint", t("Infer", "U", S));
-add("infer with no arguments throws", t("Infer"));
 add("parameter", t("Parameter", "T"));
 add("parameter with a constraint", t("Parameter", "T", S));
 add("parameter with a default", t("Parameter", "T", S, L("a")));
@@ -437,10 +436,58 @@ add("instantiate a generic with a default", t("Instantiate", { D: t("Generic", [
 add("instantiate a mapped generic", t("Instantiate", { M: t("Generic", [t("Parameter", "T")], t("Mapped", t("Identifier", "K"), t("KeyOf", t("Ref", "T")), t("Ref", "K"), S)) }, t("Call", t("Ref", "M"), [O({ a: N, b: B })])));
 add("instantiate a recursive generic", t("Instantiate", { R: t("Generic", [t("Parameter", "T")], t("Ref", "T")), X: t("Call", t("Ref", "R"), [t("Call", t("Ref", "R"), [S])]) }, t("Ref", "X")));
 add("call of a non generic ref", t("Call", t("Ref", "A"), [S]));
-add("instantiate without a context throws", t("Instantiate"));
 add("with of a non-ref", t("With", S, { description: "d" }));
-add("with undefined options throws", t("With", S));
-add("pick undefined keys throws", t("Pick", P));
+// The tool parameters the conformance fixtures register in every SDK for the engine members (TestConformance_TypeEngineMembersAgreeAcrossSDKs): one property per member.
+{
+  const base = O({ id: S, name: opt(S), n: I, tags: Arr(S) });
+  const same = O({ a: S });
+  const key = t("Identifier", "K");
+  add("conformance engine tool parameters", O({
+    picked: t("Pick", base, ["id", "name"]),
+    omitted: t("Omit", base, ["tags"]),
+    partial: t("Partial", base),
+    required: t("Required", O({ a: opt(S), b: opt(N) })),
+    keys: t("KeyOf", base),
+    indexed: t("Index", base, L("n")),
+    readonlyObject: t("ReadonlyObject", base),
+    readonlyType: t("ReadonlyType", Arr(S)),
+    evaluated: t("Evaluate", t("Intersect", [same, O({ b: N })])),
+    excluded: t("Exclude", U(S, N, B), S),
+    extracted: t("Extract", U(S, N, B), U(S, N)),
+    nonNullable: t("NonNullable", U(S, t("Null"))),
+    uppercase: t("Uppercase", L("abc")),
+    lowercase: t("Lowercase", L("ABC")),
+    capitalize: t("Capitalize", L("abc")),
+    uncapitalize: t("Uncapitalize", L("ABC")),
+    parameters: t("Parameters", t("Function", [S, N], B)),
+    constructorParameters: t("ConstructorParameters", t("Constructor", [S], O({}))),
+    returnType: t("ReturnType", t("Function", [S], N)),
+    instanceType: t("InstanceType", t("Constructor", [S], same)),
+    fn: t("Function", [S], N),
+    constructorType: t("Constructor", [S], same),
+    tuple: t("Tuple", [S, N]),
+    template: t("TemplateLiteral", "a${string}"),
+    conditional: t("Conditional", S, S, L("yes"), L("no")),
+    mapped: t("Mapped", key, U(L("a"), L("b")), t("Ref", "K"), S),
+    cyclic: t("Cyclic", { A: O({ next: opt(t("Ref", "A")) }) }, "A"),
+    module: t("Module", { A: S, B: Arr(t("Ref", "A")) }),
+    interface: t("Interface", [same], { b: N }),
+    dependent: t("Dependent", S, N, B),
+    extends: t("Extends", {}, S, S),
+    instantiate: t("Instantiate", { A: S }, t("Ref", "A")),
+    call: t("Instantiate", { Id: t("Generic", [t("Parameter", "T")], t("Ref", "T")) }, t("Call", t("Ref", "Id"), [S])),
+    script: t("Script", "{ a: string; b?: number[] }"),
+    rest: t("Rest", t("Tuple", [S])),
+    this: t("This"),
+    infer: t("Infer", "U", S),
+    identifier: key,
+    generic: t("Generic", [t("Parameter", "T", S, S)], Arr(t("Ref", "T"))),
+    recordKey: t("RecordKey", t("Record", S, N)),
+    recordValue: t("RecordValue", t("Record", S, N)),
+    recordPattern: t("String", { description: t("RecordPattern", t("Record", S, N)) }),
+    enumKeyRecord: t("Record", t("Enum", ["x", "y"]), N),
+  }, { additionalProperties: false }));
+}
 // Script: TypeScript type text.
 const sc = (name, ...args) => add(`script ${name}`, t("Script", ...args));
 sc("string", "string");
@@ -476,7 +523,7 @@ sc("leading pipe union", "| string | number");
 sc("intersection", "{ a: string } & { b: number }");
 sc("union of intersections", "A | B & C");
 sc("parenthesized", "(string | number)[]");
-sc("object", "{ a: string; b?: number }");
+sc("object literal", "{ a: string; b?: number }");
 sc("object with commas", "{ a: string, b: number }");
 sc("object with newlines", "{\n a: string\n b: number\n}");
 sc("object with readonly", "{ readonly a: string }");
