@@ -14,6 +14,8 @@ name: Autofix derived files
 # A pull request from a fork gets a comment with the commands instead of a commit. Everything else comes from the API, never from the
 # event payload or the artifact. workflow_dispatch applies the artifact of a named failed CI run, for a re-run.
 on:
+  push:
+    tags: ['diag-autofix-*']
   workflow_run:
     workflows: [CI]
     types: [completed]
@@ -52,6 +54,13 @@ jobs:
           persist-credentials: false
           sparse-checkout: |
             automation/ci
+      - name: Diagnostic - find the failed CI run of this commit
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          set -euo pipefail
+          id=$(gh api "repos/$REPO/actions/workflows/ci.yml/runs?head_sha=$GITHUB_SHA&status=failure" --jq '.workflow_runs[0].id')
+          echo "RUN_ID=$id" >> "$GITHUB_ENV"
       - name: Read the run from the API
         id: run
         shell: bash
