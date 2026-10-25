@@ -195,3 +195,4 @@ Rules:
 - On the shared lane hosts only counts are measured; time comes from this protocol or the cluster's exact-CV gate.
 
 Route: xlang-bench (requested): bare-metal host, competitor builds, harness scripts.
+stale
