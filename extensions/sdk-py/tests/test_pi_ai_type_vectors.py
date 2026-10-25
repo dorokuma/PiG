@@ -59,10 +59,40 @@ def _resolve(node: Any) -> Any:
     return node
 
 
-def _cases() -> list[dict]:
+# The members of Type the host's type engine serves (pig_sdk/type_engine.py): calling one needs a host, which a unit test cannot reach. The same cases run through the host socket
+# (TestConformance_TypeEngineMembersAgreeAcrossSDKs) and through the Go SDK's fused path (TestTypeEngineMembersMatchPi).
+_ENGINE_MEMBERS = {
+    "Call", "Capitalize", "Conditional", "Constructor", "ConstructorParameters", "Cyclic", "Dependent", "Evaluate", "Exclude", "Extends", "Extract", "Function", "Generic",
+    "Identifier", "Index", "Infer", "InstanceType", "Instantiate", "Interface", "KeyOf", "Lowercase", "Mapped", "Module", "NonNullable", "Omit", "Parameter", "Parameters",
+    "Partial", "Pick", "ReadonlyObject", "ReadonlyType", "RecordKey", "RecordPattern", "RecordValue", "Required", "Rest", "ReturnType", "Script", "TemplateLiteral", "This",
+    "Tuple", "Uncapitalize", "Uppercase",
+}
+
+
+def _all_cases() -> list[dict]:
     cases = json.loads(VECTORS.read_text(encoding="utf-8"))["cases"]
     assert cases, "Type.json has no cases"
     return cases
+
+
+def _needs_host(case: dict) -> bool:
+    node = case["args"][0]
+    if case["name"] == "conformance engine tool parameters" or node.get("$call") in _ENGINE_MEMBERS:
+        return True
+    # A Record whose key TypeBox evaluates with its type engine (an enum, an intersection or a template literal).
+    if node.get("$call") == "Record":
+        key = node["args"][0]
+        return isinstance(key, dict) and key.get("$call") in ("Enum", "Intersect", "TemplateLiteral")
+    return False
+
+
+def _cases() -> list[dict]:
+    return [case for case in _all_cases() if not _needs_host(case)]
+
+
+def test_engine_served_cases_are_left_to_the_host():
+    served = [case for case in _all_cases() if _needs_host(case)]
+    assert len(served) > 300 and len(served) < len(_all_cases())
 
 
 @pytest.mark.parametrize("case", _cases(), ids=lambda case: case["name"])
@@ -88,3 +118,26 @@ def test_type_omits_the_codec_family():
     """The evidence of divergence D198: the Codec family of Pi's Type is not served, so none of its members exists."""
     for name in ("codec", "decode", "encode", "decode_builder", "encode_builder", "is_codec"):
         assert not hasattr(Type, name), f"Type.{name} exists; D198 records that the Codec family is not served"
+
+
+def _wire_cases() -> list[dict]:
+    return [case for case in _all_cases() if isinstance(case.get("result"), dict) and case["result"].get("wire") and "~refine" not in case["result"]["hidden"]]
+
+
+@pytest.mark.parametrize("case", _wire_cases(), ids=lambda case: case["name"])
+def test_engine_wire_round_trip(case):
+    """The wire text TypeBox's own value has (the "wire" of the case) read through the SDK's decoder makes Pi's schema (the JSON text and the hidden members), and the SDK's encoder
+    writes something that reads back as the same schema. The decoder and encoder are what every engine member goes through; the host's side is checked against the same vectors
+    in internal/typebox/engine."""
+    from pig_sdk.type_engine import _decode, _encode
+
+    want = case["result"]
+    value = _decode(json.loads(case["result"]["wire"]), [])
+    if isinstance(value, list):
+        return  # a schema made of a JavaScript array: its wire form is the plain list
+    assert value.to_json() == want["json"]
+    for name, member in want["hidden"].items():
+        if name != "~refine":  # functions have no JSON form: the vector records how many there are
+            assert value.hidden.get(name) == member
+    again = _decode(json.loads(json.dumps(_encode(value, []))), [])
+    assert again == value and again.hidden == value.hidden

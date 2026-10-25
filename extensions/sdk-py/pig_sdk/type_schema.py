@@ -12,6 +12,7 @@ import re
 from typing import Any, Callable, Dict, List, Mapping, NamedTuple, Optional, Sequence
 
 from .compaction_estimate import _js_number_string
+from .type_engine import EXTENDS_RESULT, _EngineMembers, engine_call
 
 
 class TSchema(dict):
@@ -269,9 +270,12 @@ def _deferred(action: str, parameters: List[Any], options: Optional[Mapping[str,
     return _create("Deferred", ["type", "deferred", "action", action, "parameters", parameters, "options", dict(options) if options else {}], None)
 
 
-class _Type:
+class _Type(_EngineMembers):
     """pi-ai's ``Type``: ``Type.object``, ``Type.string``, ``Type.optional``, ... Pi's ``Type.With`` is ``with_`` and ``Type.BigInt`` is ``big_int``; the guards are ``is_string`` and so on.
     The JSON Schema each returns is what Pi's ``Type`` returns, member order included (test/parity/sdk-vectors/pi-ai/Type.json)."""
+
+    #: ``Type.ExtendsResult``.
+    ExtendsResult = EXTENDS_RESULT
 
     # guards
     @staticmethod
@@ -449,7 +453,7 @@ class _Type:
     def record(key: Any, value: Any, options: Optional[Mapping[str, Any]] = None) -> TSchema:
         """``Type.Record(key, value, options)``: for a string, number or integer key ``{"type": "object", "patternProperties": {<pattern>: value}}``; for a literal, boolean or
         union-of-literals key the object with those properties. A key Pi evaluates through a part of TypeBox this SDK has not ported (an enum, an intersection or a template
-        literal) raises NotImplementedError until it is."""
+        literal) is evaluated by the host's type engine."""
         if Type.is_ref(key):
             return _deferred("Record", [key, value], options)
         return _update(_record_from_key(key, value), None, options)
@@ -462,7 +466,8 @@ def _record_from_key(key: Any, value: Any) -> TSchema:
     if t.is_boolean(key):
         return t.object({"true": value, "false": value})
     if t.is_enum(key) or t.is_intersect(key) or t.is_kind(key, "TemplateLiteral"):
-        raise NotImplementedError("Type.record: a key of this kind is evaluated by a part of TypeBox this SDK has not ported yet")
+        # The key kinds TypeBox evaluates with its type engine, which the host runs.
+        return engine_call("Record", key, value)
     if t.is_integer(key):
         return _create_record(_INTEGER_KEY, value)
     if t.is_literal(key):
@@ -502,7 +507,9 @@ def _install_guards() -> None:
     for name, kind in {
         "any": "Any", "array": "Array", "big_int": "BigInt", "boolean": "Boolean", "enum": "Enum", "integer": "Integer", "intersect": "Intersect", "literal": "Literal",
         "never": "Never", "null": "Null", "number": "Number", "object": "Object", "record": "Record", "ref": "Ref", "string": "String", "symbol": "Symbol",
-        "undefined": "Undefined", "union": "Union", "unknown": "Unknown", "void": "Void",
+        "undefined": "Undefined", "union": "Union", "unknown": "Unknown", "void": "Void", "call": "Call", "constructor": "Constructor", "cyclic": "Cyclic",
+        "dependent": "Dependent", "function": "Function", "generic": "Generic", "identifier": "Identifier", "infer": "Infer", "parameter": "Parameter", "rest": "Rest",
+        "template_literal": "TemplateLiteral", "this": "This", "tuple": "Tuple",
     }.items():
         setattr(_Type, f"is_{name}", staticmethod(lambda value, _kind=kind: _Type.is_kind(value, _kind)))
 
