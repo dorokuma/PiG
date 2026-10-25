@@ -1193,7 +1193,7 @@ func (e *eng) distributeArguments(parameters []any, arguments []any, expression 
 	for i, p := range parameters {
 		distribution[i] = slices.Contains(names, propKey(get(p, "name")))
 	}
-	if !(isDeferred(expression) && (jsEqual(get(expression, "action"), "Conditional") || jsEqual(get(expression, "action"), "Mapped"))) {
+	if !isDeferred(expression) || (!jsEqual(get(expression, "action"), "Conditional") && !jsEqual(get(expression, "action"), "Mapped")) {
 		return [][]any{arguments}
 	}
 	result := [][]any{{}}
@@ -1220,7 +1220,7 @@ func (e *eng) distributeArguments(parameters []any, arguments []any, expression 
 
 func (e *eng) bindArgument(ctx *Obj, st state, name string, extendsT, t any) *Obj {
 	instantiated := e.instantiateType(ctx, st, t)
-	if !(isInfer(instantiated) || isCall(instantiated) || isExtendsTrueLike(e.extends(NewObj(), instantiated, extendsT))) {
+	if !isInfer(instantiated) && !isCall(instantiated) && !isExtendsTrueLike(e.extends(NewObj(), instantiated, extendsT)) {
 		throwError("Argument for parameter " + name + " does not satisfy constraint")
 	}
 	return Assign(ctx, NewObj(name, instantiated))

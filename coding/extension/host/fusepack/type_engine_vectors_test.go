@@ -3,6 +3,7 @@ package fusepack
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -179,7 +180,7 @@ func TestTypeEngineMembersMatchPi(t *testing.T) {
 		}
 		engineCases++
 		got, err := resolveVectorNode(node)
-		if err == errSkipVector {
+		if errors.Is(err, errSkipVector) {
 			t.Errorf("%s: the SDK has no call for this case", c.Name)
 			continue
 		}

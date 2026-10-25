@@ -10,7 +10,9 @@ import (
 // typeSchemaToolParameters is the schema Pi's Type returned for the parameters the SDK fixtures build ("conformance tool parameters" in test/parity/sdk-vectors/pi-ai/Type.json). The
 // in-process Go reference registers a tool of that name with it, so every transport lists the same tools (TestConformance_TransportsMatch); the SDK cells register the same tool built
 // with their own Type, and TestConformance_TypeSchemaToolParametersAgreeAcrossSDKs compares what the host holds.
-func typeSchemaToolParameters() json.RawMessage { return typeVectorParameters("conformance tool parameters") }
+func typeSchemaToolParameters() json.RawMessage {
+	return typeVectorParameters("conformance tool parameters")
+}
 
 // typeEngineToolParameters is the schema Pi's Type returned for the parameters of the tool "type-engine-tool" ("conformance engine tool parameters"): one property per member of Type
 // that the host's type engine serves.

@@ -187,25 +187,6 @@ func jsEqual(a, b any) bool {
 	return a == b
 }
 
-// typeofName is `typeof value`.
-func typeofName(v any) string {
-	switch v.(type) {
-	case nil, *Obj, []any:
-		return "object"
-	case bool:
-		return "boolean"
-	case float64:
-		return "number"
-	case string:
-		return "string"
-	case *big.Int:
-		return "bigint"
-	case *Opaque:
-		return "function"
-	}
-	return "undefined"
-}
-
 // hasKey is Guard.HasPropertyKey: `key in value` (an own member for the unsafe names, whose prototype members are
 // ignored), which throws for a value that is not an object.
 func hasKey(value any, key string) bool {

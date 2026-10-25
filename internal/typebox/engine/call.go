@@ -2,6 +2,7 @@ package engine
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"runtime"
 	"slices"
@@ -222,7 +223,8 @@ func Serve(request []byte) []byte {
 	}
 	decoded, err := Decode(string(req.Args))
 	if err != nil {
-		e := err.(*Error)
+		var e *Error
+		errors.As(err, &e)
 		return fail(e.Name, e.Message)
 	}
 	args, ok := decoded.([]any)
@@ -231,7 +233,8 @@ func Serve(request []byte) []byte {
 	}
 	value, err := Call(req.Member, args)
 	if err != nil {
-		e := err.(*Error)
+		var e *Error
+		errors.As(err, &e)
 		return fail(e.Name, e.Message)
 	}
 	return append(append([]byte(`{"value":`), Encode(value)...), '}')

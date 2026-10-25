@@ -151,7 +151,7 @@ func (e *eng) extendsUnknown(inferred, left, right any) any {
 func (e *eng) extendsArray(inferred, arrayLeft, left, right any) any {
 	if isArrayType(right) {
 		il, ir := isImmutable(arrayLeft), isImmutable(right)
-		if !(il && !ir) {
+		if !il || ir {
 			return e.extendsLeft(inferred, left, get(right, "items"))
 		}
 		return extendsFalse()
@@ -533,7 +533,7 @@ func (e *eng) extendsProperties(inferred, left, right any) any {
 }
 
 func recordMergeInferred(left, right any) any {
-	var result any = left
+	result := left
 	for _, key := range ownKeys(right) {
 		var v any
 		if hasKey(left, key) {
@@ -551,7 +551,7 @@ func recordMergeInferred(left, right any) any {
 }
 
 func (e *eng) extendsObjectToRecord(inferred, properties, value any) any {
-	var result any = inferred
+	result := inferred
 	for _, left := range ownKeys(properties) {
 		inf, ok := match(e.extendsLeft(NewObj(), get(properties, left), value))
 		if !ok {

@@ -96,7 +96,7 @@ func isDigit(c byte) bool { return c >= '0' && c <= '9' }
 
 func tokIdent(input string) pr {
 	input = trim(input)
-	if input == "" || !(isAlpha(input[0]) || input[0] == '_' || input[0] == '$') {
+	if input == "" || (!isAlpha(input[0]) && input[0] != '_' && input[0] != '$') {
 		return failed
 	}
 	i := 1
@@ -310,8 +310,6 @@ func mapped(p parser, mapping func(any) any) parser {
 // ref defers to a rule defined later (the grammar is mutually recursive).
 func ref(p *parser) parser { return func(input string) pr { return (*p)(input) } }
 
-func terminal(f func(string) pr) parser { return f }
-
 // ---- script/mapping ----
 
 func idx(v any, i int) any {
@@ -492,8 +490,6 @@ func applyMappedModifier(state any, add, remove string, t any) any {
 }
 
 func identity(v any) any { return v }
-
-func map0(f func(any) any) func(any) any { return f }
 
 // ---- script/parser ----
 
@@ -820,8 +816,7 @@ func init() {
 	rTypeAliasDeclaration = mapped(seq(C("type"), tokIdent, C("="), typ), func(in any) any { return NewObj(propKey(idx(in, 1)), idx(in, 3)) })
 	exportKeyword := mapped(alt(wrap(C("export")), empty), func(any) any { return nil })
 	rModuleDeclaration = mapped(seq(exportKeyword, alt(rInterfaceDeclarationGeneric, rInterfaceDeclaration, rTypeAliasDeclarationGeneric, rTypeAliasDeclaration), rOptionalSemiColon), func(in any) any { return idx(in, 1) })
-	moduleDelimiter := alt(seq(C(";"), C("\n")), seq(C(";")), seq(C("\n")))
-	moduleDelimiter = alt(seq(C(";"), C("\n")), wrap(C(";")), wrap(C("\n")))
+	moduleDelimiter := alt(seq(C(";"), C("\n")), wrap(C(";")), wrap(C("\n")))
 	rModule = mapped(seq(rModuleDeclaration, mapped(alt(seq(rModuleDeclaration, star(seq(moduleDelimiter, rModuleDeclaration)), alt(wrap(moduleDelimiter), empty)), empty), delimited)), func(in any) any {
 		declaration, list := idx(in, 0), idx(in, 1)
 		return tDeferred("Module", []any{Assign(declaration, propertiesReduce(list)[0])}, NewObj())

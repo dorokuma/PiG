@@ -1,10 +1,7 @@
 package engine
 
 import (
-	"math"
 	"math/big"
-
-	"github.com/MichaelKinsy/PiG/internal/jsnumber"
 )
 
 // Patterns TypeBox derives a record key's type from (build/type/types/{integer,number,string,bigint,never}.mjs).
@@ -170,21 +167,6 @@ func tLiteral(value any, options any) *Obj {
 		throwError("Invalid Literal value")
 	}
 	return kindOf("Literal", NewObj("type", name, "const", value), options)
-}
-
-// tEnum is Enum(value, options): a TypeScript enum object contributes the values of its non-numeric keys.
-func tEnum(value any, options any) *Obj {
-	values := value
-	if isObjectNotArray(value) {
-		list := []any{}
-		for _, k := range ownKeys(value) {
-			if math.IsNaN(jsnumber.Parse(k)) {
-				list = append(list, get(value, k))
-			}
-		}
-		values = list
-	}
-	return kindOf("Enum", NewObj("enum", values), options)
 }
 
 // tCyclic is Cyclic($defs, $ref, options): each definition gets its own `$id`.
