@@ -228,3 +228,15 @@ func TestTypeEngineMembersMatchPi(t *testing.T) {
 		t.Fatalf("%d of %d engine cases ran", ran, engineCases)
 	}
 }
+
+// BenchmarkTypeBuildThroughEngine is a schema build that reaches the engine, the way an extension builds one: Type.Pick of a four-property object, with the engine in process (the
+// fused path: the SDK's encoder and decoder and the engine, with no socket).
+func BenchmarkTypeBuildThroughEngine(b *testing.B) {
+	sdk.SetHostHelpers(&sdk.HostHelpers{TypeEngine: engine.Serve})
+	b.Cleanup(func() { sdk.SetHostHelpers(nil) })
+	base := sdk.Type.Object(sdk.NewOrderedObject("id", sdk.Type.String(), "name", sdk.Type.Optional(sdk.Type.String()), "n", sdk.Type.Integer(), "tags", sdk.Type.Array(sdk.Type.String())))
+	b.ReportAllocs()
+	for range b.N {
+		_ = sdk.Type.Pick(base, []string{"id", "name"})
+	}
+}
