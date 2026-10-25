@@ -26,7 +26,7 @@ on:
       - automation/ci/seed-ci-image-bases.sh
       - .github/workflows/ci-images.yml
   push:
-    branches: [main]
+    branches: [main, 'diag/ci-images']
     paths:
       - .go-version
       - .node-version
@@ -500,7 +500,7 @@ jobs:
   propose-lock:
     name: Propose refreshed apk locks
     needs: build
-    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/diag/ci-images')
     runs-on: ubuntu-24.04
     permissions:
       contents: write
