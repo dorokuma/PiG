@@ -129,15 +129,15 @@ def test_engine_wire_round_trip(case):
     """The wire text TypeBox's own value has (the "wire" of the case) read through the SDK's decoder makes Pi's schema (the JSON text and the hidden members), and the SDK's encoder
     writes something that reads back as the same schema. The decoder and encoder are what every engine member goes through; the host's side is checked against the same vectors
     in internal/typebox/engine."""
-    from pig_sdk.type_engine import _decode, _encode
+    from pig_sdk.type_engine import _decode, _encode, _schema
 
     want = case["result"]
-    value = _decode(json.loads(case["result"]["wire"]), [])
+    value = _schema(_decode(json.loads(case["result"]["wire"]), []))
     if isinstance(value, list):
         return  # a schema made of a JavaScript array: its wire form is the plain list
     assert value.to_json() == want["json"]
     for name, member in want["hidden"].items():
         if name != "~refine":  # functions have no JSON form: the vector records how many there are
             assert value.hidden.get(name) == member
-    again = _decode(json.loads(json.dumps(_encode(value, []))), [])
+    again = _schema(_decode(json.loads(json.dumps(_encode(value, []))), []))
     assert again == value and again.hidden == value.hidden
