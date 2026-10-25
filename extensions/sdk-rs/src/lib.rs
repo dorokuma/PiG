@@ -125,7 +125,9 @@ mod session_entry_messages;
 pub use session_entry_messages::session_entry_to_context_messages;
 mod session_context;
 pub use session_context::{SessionLeaf, build_session_context};
+mod type_engine;
 mod type_schema;
+pub use type_engine::ExtendsResult;
 pub use type_schema::{LiteralValue, Refinement, RefinementSite, TSchema, TValue, Type};
 #[cfg(test)]
 mod type_schema_tests;

@@ -92,7 +92,7 @@ impl TValue {
         }
     }
 
-    fn member(&self, name: &str) -> Option<TValue> {
+    pub(crate) fn member(&self, name: &str) -> Option<TValue> {
         match self {
             TValue::Schema(schema) => schema.hidden.get(name).map(|value| TValue::Json(value.clone())).or_else(|| schema.get(name).cloned()),
             TValue::Json(Value::Object(map)) => map.get(name).map(|value| TValue::Json(value.clone())),
@@ -105,12 +105,12 @@ impl TValue {
 /// A TypeBox schema value; see the module documentation.
 #[derive(Clone, Debug, PartialEq)]
 pub struct TSchema {
-    fields: Vec<(String, TValue)>,
-    hidden: BTreeMap<String, Value>,
+    pub(crate) fields: Vec<(String, TValue)>,
+    pub(crate) hidden: BTreeMap<String, Value>,
     /// The hidden `~refine` list.
-    refine: Vec<Refinement>,
+    pub(crate) refine: Vec<Refinement>,
     /// The list a schema made of a JavaScript array is (`Type::unsafe_`, `Type::optional` and the other updates accept an array, whose own members JSON.stringify ignores).
-    items: Option<Vec<TValue>>,
+    pub(crate) items: Option<Vec<TValue>>,
 }
 
 impl Serialize for TSchema {
@@ -688,7 +688,7 @@ impl Type {
 
     /// `Type.Record(key, value, options)`: for a string, number or integer key `{"type":"object","patternProperties":{<pattern>: value}}`; for a literal, boolean or
     /// union-of-literals key the object with those properties. A key Pi evaluates through a part of TypeBox this SDK has not ported (an enum, an intersection or a template
-    /// literal) is an error until it is.
+    /// literal) is evaluated by the host's type engine.
     pub fn record(key: impl Into<TValue>, value: impl Into<TValue>, options: Options) -> Result<TSchema, String> {
         let (key, value) = (key.into(), value.into());
         if Type::is_ref(key.clone()) {
@@ -709,7 +709,15 @@ guards!(
     is_any => "Any", is_array => "Array", is_big_int => "BigInt", is_boolean => "Boolean", is_enum => "Enum", is_integer => "Integer", is_intersect => "Intersect",
     is_literal => "Literal", is_never => "Never", is_null => "Null", is_number => "Number", is_object => "Object", is_record => "Record", is_ref => "Ref",
     is_string => "String", is_symbol => "Symbol", is_undefined => "Undefined", is_union => "Union", is_unknown => "Unknown", is_void => "Void",
+    is_call => "Call", is_constructor => "Constructor", is_cyclic => "Cyclic", is_dependent => "Dependent", is_function => "Function", is_generic => "Generic",
+    is_identifier => "Identifier", is_infer => "Infer", is_parameter => "Parameter", is_rest => "Rest", is_template_literal => "TemplateLiteral", is_this => "This",
+    is_tuple => "Tuple",
 );
+
+/// The value an Extends answer is: `{inferred}` with the hidden kind (see `ExtendsResult`).
+pub(crate) fn outcome(kind: &str, inferred: Option<TValue>) -> TSchema {
+    create(kind, inferred.into_iter().map(|inferred| ("inferred", inferred)).collect(), None)
+}
 
 fn literal_number(constant: &TValue) -> Option<f64> {
     match constant {
@@ -726,7 +734,11 @@ fn record_from_key(key: &TValue, value: TValue) -> Result<TSchema, String> {
         return Ok(Type::object([("true", value.clone()), ("false", value)], None));
     }
     if Type::is_enum(key.clone()) || Type::is_intersect(key.clone()) || Type::is_kind(key.clone(), "TemplateLiteral") {
-        return Err("Type.record: a key of this kind is evaluated by a part of TypeBox this SDK has not ported yet".to_string());
+        // The key kinds TypeBox evaluates with its type engine, which the host runs.
+        return crate::type_engine::engine_call("Record", vec![key.clone(), value]).and_then(|schema| match schema {
+            TValue::Schema(schema) => Ok(schema),
+            other => Err(format!("TypeError: the engine answered {other:?}, not a schema")),
+        });
     }
     if Type::is_integer(key.clone()) {
         return Ok(create_record(INTEGER_KEY, value));

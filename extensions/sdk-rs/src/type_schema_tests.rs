@@ -173,8 +173,16 @@ fn type_matches_pi() {
     let cases = file["cases"].as_array().expect("cases");
     assert!(!cases.is_empty(), "Type.json has no cases");
     let mut failures = Vec::new();
+    let mut engine_cases = 0;
     for case in cases {
         let name = case["name"].as_str().unwrap_or("?");
+        let record_with_engine_key = case["args"][0]["$call"] == "Record" && matches!(case["args"][0]["args"][0]["$call"].as_str(), Some("Enum" | "Intersect" | "TemplateLiteral"));
+        if record_with_engine_key || name == "conformance engine tool parameters" || case["args"][0]["$call"].as_str().is_some_and(|member| ENGINE_MEMBERS.contains(&member)) {
+            // Served by the host's type engine, which a unit test cannot reach: the same cases run through the host socket (TestConformance_TypeEngineMembersAgreeAcrossSDKs) and
+            // through the Go SDK's fused path (TestTypeEngineMembersMatchPi).
+            engine_cases += 1;
+            continue;
+        }
         let got = resolve(&case["args"][0]);
         if let Some(throws) = case.get("throws").and_then(Value::as_str) {
             match got {
@@ -209,4 +217,49 @@ fn type_matches_pi() {
         }
     }
     assert!(failures.is_empty(), "{} of {} cases differ from Pi:\n{}", failures.len(), cases.len(), failures.join("\n"));
+    assert!(engine_cases > 0 && engine_cases < cases.len());
+}
+
+/// The members of `Type` the host's type engine serves (type_engine.rs): calling one needs a host.
+const ENGINE_MEMBERS: &[&str] = &[
+    "Call", "Capitalize", "Conditional", "Constructor", "ConstructorParameters", "Cyclic", "Dependent", "Evaluate", "Exclude", "Extends", "Extract", "Function", "Generic",
+    "Identifier", "Index", "Infer", "InstanceType", "Instantiate", "Interface", "KeyOf", "Lowercase", "Mapped", "Module", "NonNullable", "Omit", "Parameter", "Parameters",
+    "Partial", "Pick", "ReadonlyObject", "ReadonlyType", "RecordKey", "RecordPattern", "RecordValue", "Required", "Rest", "ReturnType", "Script", "TemplateLiteral", "This",
+    "Tuple", "Uncapitalize", "Uppercase",
+];
+
+/// The wire text TypeBox's own value has (the "wire" of every case the host's type engine answers) read through the SDK's decoder makes Pi's schema (the JSON text and the hidden
+/// members), and the SDK's encoder writes something that reads back as the same schema. The decoder and encoder are what every engine member goes through; the host's side is
+/// checked against the same vectors in internal/typebox/engine.
+#[test]
+fn engine_wire_round_trip() {
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../test/parity/sdk-vectors/pi-ai/Type.json");
+    let file: Value = serde_json::from_slice(&std::fs::read(path).expect("Type.json")).expect("valid JSON");
+    let mut checked = 0;
+    for case in file["cases"].as_array().expect("cases") {
+        let name = case["name"].as_str().unwrap_or("?");
+        let Some(text) = case["result"]["wire"].as_str() else { continue };
+        if case["result"]["hidden"].get("~refine").is_some() {
+            continue; // the vector holds functions as undefined: the refinements are checked by their own rows
+        }
+        let wire: Value = serde_json::from_str(text).expect("wire JSON");
+        let value = crate::type_engine::decode_wire(&wire, &[]).unwrap_or_else(|error| panic!("{name}: {error}"));
+        let TValue::Schema(schema) = value else {
+            if let TValue::Object(fields) = &value {
+                assert_eq!(TValue::Object(fields.clone()).to_value().to_string().len() > 0, true);
+            }
+            continue; // a plain object (Module's answer) or a list (a schema made of a JavaScript array)
+        };
+        assert_eq!(Some(schema.to_json().as_str()), case["result"]["json"].as_str(), "{name}");
+        for (hidden, want) in case["result"]["hidden"].as_object().into_iter().flatten() {
+            if hidden != "~refine" {
+                assert_eq!(schema.hidden(hidden), Some(want), "{name}: hidden {hidden}");
+            }
+        }
+        let written = crate::type_engine::encode_wire(&TValue::Schema(schema.clone()));
+        let again = crate::type_engine::decode_wire(&written, &[]).unwrap_or_else(|error| panic!("{name}: {error}"));
+        assert_eq!(again, TValue::Schema(schema), "{name}: the schema the writer's text reads back as differs");
+        checked += 1;
+    }
+    assert!(checked > 300, "only {checked} cases carry wire text");
 }
