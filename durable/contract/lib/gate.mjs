@@ -164,9 +164,10 @@ export async function vitestRun(impl, ctx, include, label = "sc", isSc = label =
  *
  * A row marked `exclusive` (corpus: its upstream test asserts inside a real-time window that the run itself has to fill) is the one
  * exception: the gate runs it alone (runRows) and its two runs one after the other, so the window is filled by a machine nothing else
- * of the gate is running on. `run` is vitestRun; a test passes its own to see the order the runs start and end in.
+ * of the gate is running on. `ctx.run` replaces vitestRun; a test passes its own to see the order the runs start and end in.
  */
-export async function runVitestRow(row, impl, ctx, run = vitestRun) {
+export async function runVitestRow(row, impl, ctx) {
+	const run = ctx.run ?? vitestRun
 	if (!impl.control && !impl.vitest) return pending(lacks(impl))
 	const file = row.source.split("/test/").pop()
 	const label = `u-${file.replace(/[^\w.-]/g, "_")}`

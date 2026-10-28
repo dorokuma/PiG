@@ -39,24 +39,27 @@ const stub = log => async (impl, _ctx, include) => {
 	return Object.assign(file(name), { timedOut: false, guard: [] })
 }
 const row = (name, extra = {}) => ({ id: `U-${name}`, source: `packages/durable/test/${name}.test.ts`, ...extra })
+// The gate calls a runner as RUNNERS[row.runner](row, impl, ctx, corpus): the arguments after ctx are the dispatcher's, not the test's.
+const corpus = { scenario: [] }
+const call = (r, impl, log) => runVitestRow(r, impl, { out: "x", run: stub(log) }, corpus)
 
 test("runVitestRow: the reference's run and the candidate's start together", async () => {
 	const log = []
-	const result = await runVitestRow(row("shared"), { name: "cand-shared", vitest: true, candidateDir: "x", env: {} }, { out: "x" }, stub(log))
+	const result = await call(row("shared"), { name: "cand-shared", vitest: true, candidateDir: "x", env: {} }, log)
 	assert.equal(result.status, "pass", JSON.stringify(result))
 	assert.deepEqual(log.slice(0, 2), ["start ref", "start cand-shared"])
 })
 
 test("runVitestRow: an exclusive row's two runs take turns, the reference first", async () => {
 	const log = []
-	const result = await runVitestRow(row("window", { exclusive: true }), { name: "cand-window", vitest: true, candidateDir: "x", env: {} }, { out: "x" }, stub(log))
+	const result = await call(row("window", { exclusive: true }), { name: "cand-window", vitest: true, candidateDir: "x", env: {} }, log)
 	assert.equal(result.status, "pass", JSON.stringify(result))
 	assert.deepEqual(log, ["start ref", "end ref", "start cand-window", "end cand-window"])
 })
 
 test("runVitestRow: the control of an exclusive row runs the reference once", async () => {
 	const log = []
-	const result = await runVitestRow(row("control", { exclusive: true }), { name: "pi", control: true }, { out: "x" }, stub(log))
+	const result = await call(row("control", { exclusive: true }), { name: "pi", control: true }, log)
 	assert.equal(result.status, "pass", JSON.stringify(result))
 	assert.deepEqual(log, ["start ref", "end ref"])
 })
