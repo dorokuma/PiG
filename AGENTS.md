@@ -685,3 +685,4 @@ Read upstream source, read upstream tests, probe upstream behavior, then make pi
 ### Repository-specific release contract
 
 - 本仓具体权威流程见 `AGENTS.md` 既有 `make release-check`、release-candidate 证据链与发布工作流；不得以通用条款替代该门禁。
+- - **发布边界**：本仓当前镜像上游 `MichaelKinsy/PiG` 的 Tag；正式二进制、校验和与 npm 发布以上游 GitHub Release 为权威来源，本 Fork 不重复发布同一 Tag。若形成独立发行线，必须使用不冲突的版本序列并完成完整 Release/产物/registry 验收。
